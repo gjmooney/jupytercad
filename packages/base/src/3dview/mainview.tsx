@@ -733,7 +733,7 @@ export class MainView extends React.Component<IProps, IStates> {
       this._shapeToMesh(renderData.shapes);
       const options = {
         binary: true,
-        onlyVisible: false
+        onlyVisible: true
       };
 
       if (postResult && this._meshGroup) {
@@ -742,7 +742,9 @@ export class MainView extends React.Component<IProps, IStates> {
         Object.values(postResult).forEach(pos => {
           let threeShape;
           if (pos.jcObject.name.toLowerCase() === 'scene') {
-            threeShape = this._scene;
+            threeShape = this._meshGroup?.children;
+            console.log('this._scene', this._scene);
+            console.log('this._meshGroup', this._meshGroup);
           } else {
             const objName = pos.jcObject.parameters?.['Object'];
             if (!objName) {
