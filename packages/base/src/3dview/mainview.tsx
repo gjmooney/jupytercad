@@ -740,16 +740,21 @@ export class MainView extends React.Component<IProps, IStates> {
         const exporter = new GLTFExporter();
         const promises: Promise<void>[] = [];
         Object.values(postResult).forEach(pos => {
-          const objName = pos.jcObject.parameters?.['Object'];
-          if (!objName) {
-            return;
+          let threeShape;
+          if (pos.jcObject.name.toLowerCase() === 'scene') {
+            threeShape = this._scene;
+          } else {
+            const objName = pos.jcObject.parameters?.['Object'];
+            if (!objName) {
+              return;
+            }
+            threeShape = this._meshGroup!.getObjectByName(`${objName}-group`);
           }
-          const threeShape = this._meshGroup!.getObjectByName(
-            `${objName}-group`
-          );
+
           if (!threeShape) {
             return;
           }
+
           const promise = new Promise<void>(resolve => {
             exporter.parse(
               threeShape,
